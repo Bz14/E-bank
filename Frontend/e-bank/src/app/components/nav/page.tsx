@@ -1,15 +1,22 @@
 "use client";
+import { useState } from "react"; // Import useState for managing dropdown state
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
 import { usePathname } from "next/navigation";
 
 const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const path = usePathname();
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
-        <div className="text-2xl font-bold text-blue-600">
+        <div className="text-2xl font-bold">
           <Link href="/">
             <Image
               src={logo.src}
@@ -60,9 +67,8 @@ const NavBar = () => {
           </Link>
         </div>
 
-        {/* Hamburger Menu */}
         <div className="md:hidden flex items-center">
-          <button className="focus:outline-none">
+          <button onClick={toggleMenu} className="focus:outline-none">
             <svg
               className="w-6 h-6 text-gray-600"
               fill="none"
@@ -79,6 +85,37 @@ const NavBar = () => {
           </button>
         </div>
       </div>
+
+      {isOpen && (
+        <div className="md:hidden flex flex-col items-center space-y-2 px-1 py-2 bg-white text-center">
+          <Link href="/" className="hover:text-mainRed">
+            Home
+          </Link>
+          <Link href="/services" className="hover:text-mainRed">
+            Services
+          </Link>
+          <Link href="/about" className="hover:text-mainRed">
+            About Us
+          </Link>
+          <Link href="/contact" className="hover:text-mainRed">
+            Contact
+          </Link>
+          <div className="flex flex-row space-x-2">
+            <Link
+              href="/login"
+              className="text-white bg-mainRed hover:bg-hoverRed px-4 py-2 rounded w-fit"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="text-mainRed border border-mainRed hover:bg-hoverRed hover:text-white px-4 py-2 rounded w-fit"
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
