@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        mainRed: "#750F0F",
+        hoverRed: "#BD7171",
       },
     },
   },

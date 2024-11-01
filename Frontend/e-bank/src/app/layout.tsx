@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import NavBar from "./components/nav/page";
 
 const poppinsRegular = localFont({
   src: "./fonts/Poppins-Regular.ttf",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${poppinsBold.variable} ${poppinsRegular.variable} antialiased`}
       >
+        <NavBar />
         {children}
       </body>
     </html>
