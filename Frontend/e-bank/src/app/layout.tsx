@@ -3,13 +3,13 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const poppinsRegular = localFont({
-  src: "./fonts/Poppins-Regular.woff",
+  src: "./fonts/Poppins-Regular.ttf",
   weight: "400",
   variable: "--font-poppins-regular",
 });
 
 const poppinsBold = localFont({
-  src: "./fonts/Poppins-Bold.woff",
+  src: "./fonts/Poppins-Bold.ttf",
   weight: "700",
   variable: "--font-poppins-bold",
 });
