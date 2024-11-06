@@ -1,5 +1,6 @@
 "use client";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { useState } from "react";
 
 const SignUp = () => {
@@ -65,7 +66,7 @@ const SignUp = () => {
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle password visibility"
             >
-              {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+              {passwordVisible ? <MdVisibility /> : <MdVisibilityOff />}
             </button>
           </div>
 
@@ -89,13 +90,13 @@ const SignUp = () => {
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle confirm password visibility"
             >
-              {confirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+              {confirmPasswordVisible ? <MdVisibility /> : <MdVisibilityOff />}
             </button>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-mainRed text-white p-2 rounded mt-2 hover:bg-red-600 transition duration-300"
+            className="w-full bg-mainRed text-white p-2 rounded mt-2 hover:bg-hoverRed transition duration-300"
           >
             Sign Up
           </button>
@@ -118,7 +119,7 @@ const SignUp = () => {
         </div>
 
         <button className="w-full flex text-mainRed items-center justify-center bg-white border border-gray-300 p-2 rounded hover:bg-gray-100 transition duration-300">
-          <FaGoogle size={20} className="text-mainRed mr-2" />
+          <FcGoogle size={20} className="mr-2" />
           Sign Up with Google
         </button>
       </div>
