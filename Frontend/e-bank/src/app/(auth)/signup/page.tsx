@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "@/app/components/spinner/page";
 
 type SignUpForm = {
   name: string;
@@ -163,7 +164,11 @@ const SignUp = () => {
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle password visibility"
             >
-              {passwordVisible ? <MdVisibility /> : <MdVisibilityOff />}
+              {passwordVisible ? (
+                <MdVisibility size={20} />
+              ) : (
+                <MdVisibilityOff size={20} />
+              )}
             </button>
             <p style={{ color: "red", fontSize: "12px" }}>
               {errors.password?.message}
@@ -192,7 +197,11 @@ const SignUp = () => {
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle confirm password visibility"
             >
-              {confirmPasswordVisible ? <MdVisibility /> : <MdVisibilityOff />}
+              {confirmPasswordVisible ? (
+                <MdVisibility size={20} />
+              ) : (
+                <MdVisibilityOff size={20} />
+              )}
             </button>
             <p style={{ color: "red", fontSize: "12px" }}>
               {errors.confirmPassword?.message}
@@ -203,7 +212,7 @@ const SignUp = () => {
             type="submit"
             className="w-full bg-mainRed text-white p-2 rounded mt-2 hover:bg-hoverRed transition duration-300"
           >
-            {loading ? "Hello" : "Sign Up"}
+            {loading ? <Spinner /> : "Sign Up"}
           </button>
         </form>
 
