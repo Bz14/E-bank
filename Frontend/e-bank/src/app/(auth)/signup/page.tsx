@@ -1,11 +1,99 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+type SignUpForm = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const schema = yup.object({
+  name: yup.string().required("Full name is required."),
+  email: yup
+    .string()
+    .required("Email is required.")
+    .email("Invalid email format."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(8, "Password must be at least 8 characters.")
+    .matches(
+      /(?=.*[A-Z])/,
+      "Password must contain at least one uppercase letter."
+    )
+    .matches(
+      /(?=.*[a-z])/,
+      "Password must contain at least one lowercase letter."
+    )
+    .matches(/(?=.*[0-9])/, "Password must contain at least one number.")
+    .matches(
+      /(?=.*[@$!%*?&])/,
+      "Password must contain at least one special character."
+    ),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), undefined], "Passwords must match.")
+    .required("Please confirm your password."),
+});
 
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const form = useForm<SignUpForm>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    mode: "all",
+    resolver: yupResolver(schema),
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, formState, reset } = form;
+  const { errors, isDirty, isValid, isSubmitting, isSubmitSuccessful } =
+    formState;
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  const onError = (errors: FieldErrors) => {
+    console.log(errors);
+  };
+
+  const onSubmit = async (data: SignUpForm) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+      }
+      reset();
+      setLoading(false);
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+      console.log("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -13,7 +101,7 @@ const SignUp = () => {
         <h3 className="text-xl font-semibold mb-4 text-center">
           Create an Account
         </h3>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="mb-4 text-gray-500">
             <label
               htmlFor="name"
@@ -24,10 +112,14 @@ const SignUp = () => {
             <input
               type="text"
               id="name"
+              {...register("name")}
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your name"
               required
             />
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.name?.message}
+            </p>
           </div>
 
           <div className="mb-4">
@@ -40,10 +132,14 @@ const SignUp = () => {
             <input
               type="email"
               id="email"
+              {...register("email")}
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your email"
               required
             />
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.email?.message}
+            </p>
           </div>
 
           <div className="mb-4 relative">
@@ -56,6 +152,7 @@ const SignUp = () => {
             <input
               type={passwordVisible ? "text" : "password"}
               id="password"
+              {...register("password")}
               className="w-full p-2 pr-10 border border-gray-300 rounded"
               placeholder="Enter your password"
               required
@@ -68,6 +165,9 @@ const SignUp = () => {
             >
               {passwordVisible ? <MdVisibility /> : <MdVisibilityOff />}
             </button>
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.password?.message}
+            </p>
           </div>
 
           <div className="mb-4 relative">
@@ -80,25 +180,30 @@ const SignUp = () => {
             <input
               type={confirmPasswordVisible ? "text" : "password"}
               id="confirmPassword"
+              {...register("confirmPassword")}
               className="w-full p-2 pr-10 border border-gray-300 rounded"
               placeholder="Confirm your password"
               required
             />
             <button
               type="button"
+              disabled={(!isDirty && !isValid) || isSubmitting}
               onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle confirm password visibility"
             >
               {confirmPasswordVisible ? <MdVisibility /> : <MdVisibilityOff />}
             </button>
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.confirmPassword?.message}
+            </p>
           </div>
-
+          <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
           <button
             type="submit"
             className="w-full bg-mainRed text-white p-2 rounded mt-2 hover:bg-hoverRed transition duration-300"
           >
-            Sign Up
+            {loading ? "Hello" : "Sign Up"}
           </button>
         </form>
 
