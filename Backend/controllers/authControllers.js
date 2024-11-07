@@ -1,7 +1,7 @@
 const bycrypt = require("bcryptjs");
 const User = require("../models/User");
 const UnverifiedUser = require("../models/UnverifiedUser");
-const validate = require("../utils/validate");
+const validate = require("../utils/validator");
 const sendEmail = require("../utils/verification_email");
 const otpGenerator = require("otp-generator");
 
