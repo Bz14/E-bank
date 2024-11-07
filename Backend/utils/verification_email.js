@@ -33,10 +33,10 @@ const sendEmail = async (email, token) => {
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
       console.log(err);
-      return False;
+      return false;
     } else {
       console.log(info);
-      return True;
+      return true;
     }
   });
 };
