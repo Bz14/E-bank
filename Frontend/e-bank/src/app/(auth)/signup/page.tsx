@@ -59,7 +59,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, formState, reset } = form;
-  const { errors, isDirty, isValid, isSubmitting, isSubmitSuccessful } =
+  const { errors, isValid, isDirty, isSubmitting, isSubmitSuccessful } =
     formState;
 
   useEffect(() => {
@@ -192,7 +192,6 @@ const SignUp = () => {
             />
             <button
               type="button"
-              disabled={(!isDirty && !isValid) || isSubmitting}
               onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
               className="absolute mt-6 inset-y-0 right-3 flex items-center text-gray-600"
               aria-label="Toggle confirm password visibility"
@@ -210,6 +209,7 @@ const SignUp = () => {
           <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
           <button
             type="submit"
+            disabled={(!isDirty && !isValid) || isSubmitting}
             className="w-full bg-mainRed text-white p-2 rounded mt-2 hover:bg-hoverRed transition duration-300"
           >
             {loading ? <Spinner /> : "Sign Up"}
