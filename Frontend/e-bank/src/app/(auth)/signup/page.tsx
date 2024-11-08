@@ -6,6 +6,7 @@ import { FieldErrors, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "@/app/components/spinner/page";
+import { useRouter } from "next/navigation";
 
 type SignUpForm = {
   name: string;
@@ -46,6 +47,7 @@ const schema = yup.object({
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const router = useRouter();
   const form = useForm<SignUpForm>({
     defaultValues: {
       name: "",
@@ -75,19 +77,20 @@ const SignUp = () => {
   const onSubmit = async (data: SignUpForm) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error);
-      }
+      // const response = await fetch("/api/auth/signup", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+      // if (!response.ok) {
+      //   const error = await response.text();
+      //   throw new Error(error);
+      // }
       reset();
       setLoading(false);
+      router.push(`/verify?email=${encodeURIComponent(data.email)}`);
     } catch (error) {
       setError("Something went wrong. Please try again later.");
       console.log("Error:", error);
