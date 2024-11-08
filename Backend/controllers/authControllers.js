@@ -136,7 +136,23 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const user = await UnverifiedUser.findOne({ email });
+    const user = await User.findOne({ email });
+    if (!user) {
+      const unverifiedUser = await UnverifiedUser.findOne({ email });
+      if (!unverifiedUser) {
+        return res.status(400).json({ message: "Invalid email or password" });
+      }
+      return res.status(400).json({ message: "Verify your Email" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).json({ message: "Verify your Email" });
+    }
+
+    const validPassword = await bycrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
   } catch {
     return res.status(500).json({ message: "Internal Server Error" });
   }
