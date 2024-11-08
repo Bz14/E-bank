@@ -76,3 +76,68 @@ exports.signUp = async (req, res) => {
     }
   }
 };
+
+exports.verify = async (req, res) => {
+  const { otp, email } = req.body;
+  if (!otp) {
+    return res.status(400).json({ message: "OTP is required" });
+  }
+  try {
+    const user = await UnverifiedUser.findOne({ email });
+    if (!(user.otp === otp)) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    } else if (user.otpExpiry < Date.now()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+  } catch {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+  const newUser = new User({
+    name: user.name,
+    email: user.email,
+    password: user.password,
+    isVerified: true,
+    otp: null,
+    otpExpiry: null,
+  });
+  try {
+    const savedUser = await newUser.save();
+    const deletedUser = await UnverifiedUser.deleteOne({ email });
+
+    if (!savedUser) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    if (!deletedUser) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    console.log(savedUser, deletedUser);
+    return res.status(200).json({ message: "User verified successfully" });
+  } catch {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  if (!validate.validateEmail(email)) {
+    return res.status(400).json({ message: "Invalid email" });
+  }
+
+  if (!validate.validatePassword(password)) {
+    return res.status(400).json({
+      message:
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number",
+    });
+  }
+
+  try {
+    const user = await UnverifiedUser.findOne({ email });
+  } catch {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
