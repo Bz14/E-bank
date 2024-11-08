@@ -30,9 +30,6 @@ exports.signUp = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 
-  const salt = await bycrypt.genSalt(10);
-  const hashedPassword = await bycrypt.hash(password, salt);
-
   const existingUnverifiedUser = await UnverifiedUser.findOne({ email });
   const otp = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
@@ -40,41 +37,42 @@ exports.signUp = async (req, res) => {
     lowerCaseAlphabets: false,
   });
   if (existingUnverifiedUser) {
-    if (existingUnverifiedUser.verificationTokenExpiry < Date.now()) {
-      otp = existingUnverifiedUser.verificationToken;
-    } else {
+    if (existingUnverifiedUser.verificationTokenExpiry > Date.now()) {
       existingUnverifiedUser.verificationToken = otp;
       existingUnverifiedUser.verificationTokenExpiry = Date.now() + 3600000;
       try {
         existingUnverifiedUser.save();
       } catch {
         return res.status(500).json({ message: "Internal Server Error" });
+      } finally {
+        let isSent = sendEmail(email, otp);
+        if (!isSent) {
+          return res.status(500).json({ message: "Internal Server Error" });
+        }
+        return res.status(200).json({ message: "Email sent successfully" });
       }
     }
-    let isSent = sendEmail(email, otp);
-    if (!isSent) {
-      return res.status(500).json({ message: "Internal Server Error" });
-    }
-    return res.status(200).json({ message: "Email sent successfully" });
-  }
-  const newUser = new UnverifiedUser({
-    name,
-    email,
-    password: hashedPassword,
-    otp: otp,
-    otpExpiry: Date.now() + 3600000,
-  });
+    const salt = await bycrypt.genSalt(10);
+    const hashedPassword = await bycrypt.hash(password, salt);
+    const newUser = new UnverifiedUser({
+      name,
+      email,
+      password: hashedPassword,
+      otp: otp,
+      otpExpiry: Date.now() + 3600000,
+    });
 
-  try {
-    const savedUser = await newUser.save();
-    console.log(savedUser);
-  } catch {
-    return res.status(500).json({ message: "Internal Server Error" });
-  } finally {
-    let isSent = sendEmail(email, otp);
-    if (!isSent) {
+    try {
+      const savedUser = await newUser.save();
+      console.log(savedUser);
+    } catch {
       return res.status(500).json({ message: "Internal Server Error" });
+    } finally {
+      let isSent = sendEmail(email, otp);
+      if (!isSent) {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+      return res.status(200).json({ message: "Email sent successfully" });
     }
-    return res.status(200).json({ message: "Email sent successfully" });
   }
 };
