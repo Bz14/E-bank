@@ -3,6 +3,7 @@ const User = require("../models/User");
 const UnverifiedUser = require("../models/UnverifiedUser");
 const validate = require("../utils/validator");
 const sendEmail = require("../utils/verification_email");
+const { generateAccessToken, generateRefreshToken } = require("../utils/token");
 const otpGenerator = require("otp-generator");
 
 require("dotenv").config();
@@ -153,6 +154,17 @@ exports.login = async (req, res) => {
     if (!validPassword) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({ accessToken });
   } catch {
     return res.status(500).json({ message: "Internal Server Error" });
   }
