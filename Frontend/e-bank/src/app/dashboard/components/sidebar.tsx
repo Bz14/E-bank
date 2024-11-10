@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import logo from "../../assets/logo.png";
 import Image from "next/image";
@@ -9,78 +12,103 @@ import {
   MdSettings,
   MdCreditCard,
   MdLogout,
+  MdMenu,
 } from "react-icons/md";
 
 const Sidebar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex h-screen bg-mainRed text-white">
-      <div className="w-64 bg-mainRed p-6">
-        <Image
-          src={logo}
-          alt="logo"
-          width={100}
-          height={100}
-          className="text-2xl font-bold mb-8"
-        />
-        <ul>
+    <div className="flex h-screen">
+      <div
+        className={`${
+          isSidebarOpen ? "w-64" : "w-20"
+        } bg-mainRed text-white transition-all duration-300 ease-in-out`}
+      >
+        <div className="flex items-center justify-between p-6">
+          {isSidebarOpen && (
+            <Image
+              src={logo}
+              alt="logo"
+              width={100}
+              height={100}
+              className="text-2xl font-bold"
+            />
+          )}
+          <button
+            onClick={toggleSidebar}
+            className="text-white focus:outline-none"
+          >
+            <MdMenu size={24} />
+          </button>
+        </div>
+
+        <ul className="ml-4">
           <li className="mb-4">
             <Link href="/dashboard/user">
               <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdPerson />
-                <span>User</span>
+                <MdPerson size={24} />
+                {isSidebarOpen && <span>User</span>}
               </div>
             </Link>
           </li>
           <li className="mb-4">
             <Link href="/dashboard/account">
               <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdDashboard />
-                <span>Account</span>
+                <MdDashboard size={24} />
+                {isSidebarOpen && <span>Account</span>}
               </div>
             </Link>
           </li>
           <li className="mb-4">
             <Link href="/dashboard/transaction">
-              <p className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdHistory />
-                <span>Transaction</span>
-              </p>
+              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+                <MdHistory size={24} />
+                {isSidebarOpen && <span>Transaction</span>}
+              </div>
             </Link>
           </li>
           <li className="mb-4">
             <Link href="/dashboard/send">
-              <p className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdSend />
-                <span>Send Money</span>
-              </p>
+              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+                <MdSend size={24} />
+                {isSidebarOpen && <span>Send Money</span>}
+              </div>
             </Link>
           </li>
           <li className="mb-4">
             <Link href="/dashboard/setting">
-              <p className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdSettings />
-                <span>Settings</span>
-              </p>
+              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+                <MdSettings size={24} />
+                {isSidebarOpen && <span>Settings</span>}
+              </div>
             </Link>
           </li>
           <li className="mb-4">
             <Link href="/dashboard/cards">
-              <p className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdCreditCard />
-                <span>Cards</span>
-              </p>
+              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+                <MdCreditCard size={24} />
+                {isSidebarOpen && <span>Cards</span>}
+              </div>
             </Link>
           </li>
           <li>
             <Link href="/dashboard/logout">
-              <p className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
-                <MdLogout />
-                <span>Logout</span>
-              </p>
+              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+                <MdLogout size={24} />
+                {isSidebarOpen && <span>Logout</span>}
+              </div>
             </Link>
           </li>
         </ul>
       </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-6">{/* Main content goes here */}</div>
     </div>
   );
 };
