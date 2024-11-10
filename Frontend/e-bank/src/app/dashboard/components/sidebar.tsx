@@ -17,7 +17,7 @@ import {
 import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const path = usePathname();
   console.log(path);
 

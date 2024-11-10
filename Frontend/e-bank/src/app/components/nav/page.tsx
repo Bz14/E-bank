@@ -51,9 +51,9 @@ const NavBar = () => {
               <hr className="border-0 h-1 bg-mainRed my-1" />
             )}
           </Link>
-          <Link href="/dashboard" className="hover:text-mainRed">
+          <Link href="/dashboard/user" className="hover:text-mainRed">
             Dashboard
-            {path == "/dashboard" && (
+            {path == "/dashboard/user" && (
               <hr className="border-0 h-1 bg-mainRed my-1" />
             )}
           </Link>
