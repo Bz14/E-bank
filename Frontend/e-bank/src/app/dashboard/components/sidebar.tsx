@@ -14,9 +14,12 @@ import {
   MdLogout,
   MdMenu,
 } from "react-icons/md";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const path = usePathname();
+  console.log(path);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -50,7 +53,11 @@ const Sidebar = () => {
         <ul className="ml-4">
           <li className="mb-4">
             <Link href="/dashboard/user">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/user" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdPerson size={24} />
                 {isSidebarOpen && <span>User</span>}
               </div>
@@ -58,7 +65,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/dashboard/account">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/account" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdDashboard size={24} />
                 {isSidebarOpen && <span>Account</span>}
               </div>
@@ -66,7 +77,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/dashboard/transaction">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/transaction" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdHistory size={24} />
                 {isSidebarOpen && <span>Transaction</span>}
               </div>
@@ -74,7 +89,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/dashboard/send">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/send" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdSend size={24} />
                 {isSidebarOpen && <span>Send Money</span>}
               </div>
@@ -82,7 +101,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/dashboard/setting">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/setting" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdSettings size={24} />
                 {isSidebarOpen && <span>Settings</span>}
               </div>
@@ -90,7 +113,11 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/dashboard/cards">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/cards" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdCreditCard size={24} />
                 {isSidebarOpen && <span>Cards</span>}
               </div>
@@ -98,7 +125,11 @@ const Sidebar = () => {
           </li>
           <li>
             <Link href="/dashboard/logout">
-              <div className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-md">
+              <div
+                className={`flex items-center ${
+                  path == "/dashboard/logout" ? "bg-hoverRed" : ""
+                } space-x-2 hover:bg-hoverRed p-2 rounded-md`}
+              >
                 <MdLogout size={24} />
                 {isSidebarOpen && <span>Logout</span>}
               </div>
