@@ -51,6 +51,12 @@ const NavBar = () => {
               <hr className="border-0 h-1 bg-mainRed my-1" />
             )}
           </Link>
+          <Link href="/dashboard" className="hover:text-mainRed">
+            Dashboard
+            {path == "/dashboard" && (
+              <hr className="border-0 h-1 bg-mainRed my-1" />
+            )}
+          </Link>
         </div>
         <div className="hidden md:flex space-x-4">
           <Link
